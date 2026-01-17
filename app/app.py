@@ -199,7 +199,7 @@ CLASS_INFO = {
         "display_name": "Healthy (Tanaman Sehat)",
         "desc": """
         ### 📖 Kondisi Tanaman
-        **Alhamdulillah!** Tanaman tomat Anda kondisi **SEHAT**. Perawatan sudah bagus.
+        **Syukurlah!** Tanaman tomat Anda kondisi **SEHAT**. Perawatan sudah bagus.
         
         ### 🔍 Ciri-Ciri:
         1.  **Warna Daun:** Hijau segar merata.
@@ -245,7 +245,7 @@ model = load_model()
 # =============================
 with st.sidebar:
     # Menggunakan URL eksternal agar aman & tidak error path
-    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
+    st.image("", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
@@ -290,7 +290,7 @@ if menu == "🚀 Cek Penyakit":
     with c1:
         st.markdown(f'''
         <div class="metric-container">
-            <p class="metric-value">{len(CLASS_NAMES)}</p>
+            <p class="metric-value">{len(CLASS_NAMES)-1}</p>
             <p class="metric-label">Jenis Penyakit Dikenali</p>
         </div>''', unsafe_allow_html=True)
     with c2:
@@ -359,7 +359,7 @@ if menu == "🚀 Cek Penyakit":
     col_left, col_right = st.columns([1, 1.5], gap="large")
 
     with col_left:
-        st.subheader("1. Ambil/Upload Foto Daun")
+        st.subheader("Ambil/Upload Foto Daun")
         st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang.")
         with st.container(border=True):
             uploaded_file = st.file_uploader(
