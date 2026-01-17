@@ -20,14 +20,15 @@ st.set_page_config(
 # =============================
 # 2. DEFINISI PATH (Wajib Absolut untuk Cloud)
 # =============================
-# Mendapatkan lokasi file app.py saat ini
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-# Mundur satu folder ke belakang (Root Repository)
 ROOT_DIR = os.path.join(CURRENT_DIR, "..")
 
-# Definisikan lokasi Model dan Gambar Sampel
+# Model tetap cari di folder luar (Root)
 path_model = os.path.join(ROOT_DIR, "models", "mobilenetv2_tomato.h5")
-SAMPLE_DIR = os.path.join(ROOT_DIR, "sample_images")
+
+# --- PERUBAHAN DI SINI ---
+# Gambar cari di folder 'app' (CURRENT_DIR), bukan ROOT_DIR
+SAMPLE_DIR = os.path.join(CURRENT_DIR, "sample_images")
 
 # =============================
 # 3. STATE MANAGEMENT
