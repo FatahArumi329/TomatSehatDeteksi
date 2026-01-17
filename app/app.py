@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 
 # =============================
-# 1. KONFIGURASI HALAMAN & TEMA (FULL WIDE)
+# 1. KONFIGURASI HALAMAN & TEMA
 # =============================
 st.set_page_config(
     page_title="TomatAI - Sahabat Petani Tomat",
@@ -37,7 +37,7 @@ def add_to_history(filename, class_name, confidence):
     })
 
 # =============================
-# 3. CSS TAMPILAN (DIPERLEBAR)
+# 3. CSS TAMPILAN
 # =============================
 st.markdown("""
 <style>
@@ -125,7 +125,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =============================
-# 4. DATABASE PENGETAHUAN (BAHASA PETANI)
+# 4. DATABASE PENGETAHUAN
 # =============================
 CLASS_INFO = {
     "Early Blight": {
@@ -216,20 +216,36 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 # =============================
 # 5. LOAD MODEL (Cached)
 # =============================
+# @st.cache_resource
+# def load_model():
+#     path = "../models/mobilenetv2_tomato.h5" 
+#     if not os.path.exists(path):
+#         path_backup = "../models/mobilenetv2_tomato.h5"
+#         if os.path.exists(path_backup):
+#             return tf.keras.models.load_model(path_backup)
+#         else:
+#             return None
+#     return tf.keras.models.load_model(path)
+
+# model = load_model()
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+
 @st.cache_resource
 def load_model():
-    path = "../models/mobilenetv2_tomato.h5" 
-    if not os.path.exists(path):
-        path_backup = "../models/mobilenetv2_tomato.h5"
-        if os.path.exists(path_backup):
-            return tf.keras.models.load_model(path_backup)
-        else:
-            return None
-    return tf.keras.models.load_model(path)
-
-model = load_model()
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+    # 1. Dapatkan lokasi absolut file app.py saat ini
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Bangun path menuju file model
+    # Logikanya: Dari folder 'app', MUNDUR satu langkah (..), lalu masuk 'models'
+    model_path = os.path.join(current_dir, "..", "models", "mobilenetv2_tomato.h5")
+    
+    # 3. Cek apakah file benar-benar ada (untuk debugging di logs cloud)
+    if not os.path.exists(model_path):
+        st.error(f"File model tidak ditemukan di: {model_path}")
+        return None
+        
+    return tf.keras.models.load_model(model_path)
 
 # =============================
 # 6. SIDEBAR NAVIGASI
