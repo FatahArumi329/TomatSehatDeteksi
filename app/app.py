@@ -199,7 +199,7 @@ CLASS_INFO = {
         "display_name": "Healthy (Tanaman Sehat)",
         "desc": """
         ### 📖 Kondisi Tanaman
-        **Syukurlah!** Tanaman tomat Anda kondisi **SEHAT**. Perawatan sudah bagus.
+        **Alhamdulillah!** Tanaman tomat Anda kondisi **SEHAT**. Perawatan sudah bagus.
         
         ### 🔍 Ciri-Ciri:
         1.  **Warna Daun:** Hijau segar merata.
@@ -245,7 +245,7 @@ model = load_model()
 # =============================
 with st.sidebar:
     # Menggunakan URL eksternal agar aman & tidak error path
-    st.image("", width=90)
+    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
@@ -361,7 +361,7 @@ if menu == "🚀 Cek Penyakit":
 
     with col_left:
         st.subheader("Ambil/Upload Foto Daun")
-        st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang serta jangan ada objek selain daun seperti tangan dan tanaman lain.")
+        st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang.")
         with st.container(border=True):
             uploaded_file = st.file_uploader(
                 "", 
@@ -507,7 +507,7 @@ elif menu == "📊 Riwayat Saya":
 # =============================
 elif menu == "ℹ️ Tentang Aplikasi":
     st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=120)
+    st.image("", width=120)
     st.title("TomatAI v1.0")
     st.caption("Teknologi Canggih untuk Pertanian Indonesia")
     st.markdown("</div>", unsafe_allow_html=True)
