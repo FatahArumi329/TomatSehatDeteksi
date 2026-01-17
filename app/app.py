@@ -290,7 +290,8 @@ if menu == "🚀 Cek Penyakit":
     with c1:
         st.markdown(f'''
         <div class="metric-container">
-            <p class="metric-value">{len(CLASS_NAMES)-1}</p>
+            # <p class="metric-value">{len(CLASS_NAMES)}</p>
+            <p class="metric-value">2</p>
             <p class="metric-label">Jenis Penyakit Dikenali</p>
         </div>''', unsafe_allow_html=True)
     with c2:
@@ -360,7 +361,7 @@ if menu == "🚀 Cek Penyakit":
 
     with col_left:
         st.subheader("Ambil/Upload Foto Daun")
-        st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang.")
+        st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang serta jangan ada objek selain daun seperti tangan dan tanaman lain.")
         with st.container(border=True):
             uploaded_file = st.file_uploader(
                 "", 
