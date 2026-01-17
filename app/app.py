@@ -13,12 +13,24 @@ from datetime import datetime
 st.set_page_config(
     page_title="TomatAI - Sahabat Petani Tomat",
     page_icon="🍅",
-    layout="wide", # Pastikan ini tetap "wide"
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # =============================
-# 2. STATE MANAGEMENT
+# 2. DEFINISI PATH (Wajib Absolut untuk Cloud)
+# =============================
+# Mendapatkan lokasi file app.py saat ini
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Mundur satu folder ke belakang (Root Repository)
+ROOT_DIR = os.path.join(CURRENT_DIR, "..")
+
+# Definisikan lokasi Model dan Gambar Sampel
+path_model = os.path.join(ROOT_DIR, "models", "mobilenetv2_tomato.h5")
+SAMPLE_DIR = os.path.join(ROOT_DIR, "sample_images")
+
+# =============================
+# 3. STATE MANAGEMENT
 # =============================
 if 'history' not in st.session_state:
     st.session_state.history = []
@@ -37,7 +49,7 @@ def add_to_history(filename, class_name, confidence):
     })
 
 # =============================
-# 3. CSS TAMPILAN
+# 4. CSS TAMPILAN
 # =============================
 st.markdown("""
 <style>
@@ -53,14 +65,13 @@ st.markdown("""
         color: #e6edf3;
     }
 
-    /* --- PERBAIKAN LEBAR HALAMAN DI SINI --- */
-    /* Memaksa konten menggunakan lebar maksimal layar */
+    /* --- PERBAIKAN LEBAR HALAMAN --- */
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
         padding-left: 2rem;
         padding-right: 2rem;
-        max-width: 98% !important; /* Gunakan 98% lebar layar */
+        max-width: 98% !important;
     }
 
     /* Sidebar */
@@ -125,7 +136,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =============================
-# 4. DATABASE PENGETAHUAN
+# 5. DATABASE PENGETAHUAN
 # =============================
 CLASS_INFO = {
     "Early Blight": {
@@ -134,22 +145,22 @@ CLASS_INFO = {
         ### 📖 Pengertian & Penyebab
         Ini adalah penyakit **Bercak Kering** atau hawar daun awal. Penyebabnya adalah jamur *Alternaria solani*. Penyakit ini sering muncul saat cuaca mulai lembap atau sering hujan diselingi panas.
         
-        ### 🔍 Ciri-Ciri Fisik (Lihat Daunnya):
-        1.  **Bercak Bulat:** Ada bercak cokelat atau hitam yang bentuknya bulat-bulat cincin seperti **papan target panahan** atau obat nyamuk bakar.
-        2.  **Daun Menguning:** Pinggiran bercak biasanya dikelilingi warna kuning. Lama-lama daun jadi kering kerontang.
-        3.  **Posisi:** Biasanya penyakit ini menyerang **daun paling bawah (tua)** dulu, baru menjalar ke atas.
+        ### 🔍 Ciri-Ciri Fisik:
+        1.  **Bercak Bulat:** Ada bercak cokelat atau hitam bulat cincin seperti **target panahan**.
+        2.  **Daun Menguning:** Pinggiran bercak dikelilingi warna kuning.
+        3.  **Posisi:** Biasanya menyerang **daun paling bawah (tua)** dulu.
         """,
         "solusi": """
         ### 🛠️ Solusi & Cara Mengobati
         
-        **1. Perawatan Lahan (Tanpa Obat):**
-        * **Potong Daun:** Segera potong daun yang kena bercak. Buang jauh-jauh atau bakar, jangan ditaruh di bawah pohon.
-        * **Kurangi Kelembapan:** Pangkas tunas air atau daun rimbun di bagian bawah supaya angin lancar dan matahari masuk.
-        * **Pakai Mulsa:** Gunakan plastik mulsa perak agar spora jamur di tanah tidak muncrat ke daun saat hujan.
+        **1. Perawatan Lahan:**
+        * Potong daun yang sakit & bakar.
+        * Pangkas tunas air agar sirkulasi udara lancar.
+        * Pakai mulsa perak.
         
-        **2. Penyemprotan (Obat/Fungisida):**
-        * Gunakan fungisida berbahan aktif **Chlorothalonil** (contoh merek: Daconil) atau **Mancozeb**.
-        * Semprot **1 minggu sekali**. Pastikan bagian bawah daun juga kena semprot.
+        **2. Penyemprotan:**
+        * Gunakan fungisida bahan aktif **Chlorothalonil** atau **Mancozeb**.
+        * Semprot 1 minggu sekali.
         """,
         "status": "Waspada",
         "color": "#e3b341", # Kuning
@@ -159,26 +170,23 @@ CLASS_INFO = {
         "display_name": "Late Blight (Busuk Daun)",
         "desc": """
         ### 📖 Pengertian & Penyebab
-        Ini adalah penyakit **Busuk Daun** atau hawar daun akhir. Penyebabnya adalah jamur air *Phytophthora infestans*. **Hati-hati!** Ini penyakit paling ganas pada tomat. Bisa bikin gagal panen total dalam hitungan hari kalau hujan terus-menerus.
+        Ini adalah penyakit **Busuk Daun**. Penyebabnya jamur air *Phytophthora infestans*. **Hati-hati!** Sangat ganas dan menyebar cepat.
         
-        ### 🔍 Ciri-Ciri Fisik (Lihat Daunnya):
-        1.  **Bercak Basah:** Luka pada daun terlihat seperti **disiram air panas** (basah/lebam), warnanya hijau kelabu sampai hitam.
-        2.  **Ada Bulu Putih:** Kalau pagi hari atau cuaca lembap, coba lihat bagian **bawah daun**. Biasanya ada serbuk/bulu halus warna putih.
-        3.  **Menyebar Cepat:** Batang bisa ikut membusuk hitam, dan buah tomat jadi keras berwarna cokelat.
+        ### 🔍 Ciri-Ciri Fisik:
+        1.  **Bercak Basah:** Luka terlihat seperti disiram air panas (lebam hijau kelabu/hitam).
+        2.  **Bulu Putih:** Ada serbuk putih di bagian **bawah daun** saat pagi.
+        3.  **Menyebar Cepat:** Batang dan buah bisa ikut membusuk.
         """,
         "solusi": """
         ### 🛠️ Solusi & Cara Mengobati
         
-        **1. Tindakan Darurat (Wajib Cepat):**
-        * **Cabut Tanaman:** Kalau sudah parah, cabut tanaman seakarnya. Masukkan kresek, ikat rapat, lalu buang jauh atau bakar. **JANGAN** dijadikan kompos.
-        * **Karantina:** Jangan pegang tanaman sehat setelah memegang tanaman sakit sebelum cuci tangan.
+        **1. Tindakan Darurat:**
+        * Cabut tanaman sakit seakarnya, masukkan plastik, lalu buang/bakar.
+        * Cuci tangan sebelum memegang tanaman sehat.
         
-        **2. Pengaturan Air:**
-        * Jangan menyiram tanaman dari atas (disemprot ke daun) saat sore hari. Usahakan daun kering saat malam tiba.
-        
-        **3. Penyemprotan (Obat/Fungisida):**
-        * **Pencegahan:** Pakai fungisida **Tembaga** (Copper) atau **Mancozeb** sebelum hujan turun.
-        * **Pengobatan:** Kalau sudah kena, cari obat yang sifatnya *sistemik* (masuk ke jaringan) seperti bahan aktif **Dimethomorph** atau **Cymoxanil**.
+        **2. Penyemprotan:**
+        * Pencegahan: Fungisida **Tembaga** (Copper) atau **Mancozeb**.
+        * Pengobatan: Fungisida sistemik (**Dimethomorph** atau **Cymoxanil**).
         """,
         "status": "Bahaya / Kritis",
         "color": "#d73a49", # Merah
@@ -188,23 +196,23 @@ CLASS_INFO = {
         "display_name": "Healthy (Tanaman Sehat)",
         "desc": """
         ### 📖 Kondisi Tanaman
-        **Alhamdulillah!** Tanaman tomat Anda terdeteksi dalam kondisi **SEHAT**. Ini berarti perawatan yang Bapak/Ibu lakukan sudah bagus. Nutrisi tercukupi dan tidak ada serangan hama atau jamur yang terlihat.
+        **Alhamdulillah!** Tanaman tomat Anda kondisi **SEHAT**. Perawatan sudah bagus.
         
-        ### 🔍 Ciri-Ciri Tanaman Sehat:
-        1.  **Warna Daun:** Hijau segar merata, tidak ada bercak kuning atau cokelat.
-        2.  **Bentuk Daun:** Daun mekar sempurna, tegak, dan tidak layu/loyo.
-        3.  **Batang:** Batang kokoh, bersih, dan berbulu halus.
+        ### 🔍 Ciri-Ciri:
+        1.  **Warna Daun:** Hijau segar merata.
+        2.  **Bentuk Daun:** Mekar sempurna, tidak layu.
+        3.  **Batang:** Kokoh dan bersih.
         """,
         "solusi": """
-        ### 🛠️ Tips Merawat Agar Tetap Sehat
+        ### 🛠️ Tips Merawat
         
-        **1. Jaga Makanan (Pupuk):**
-        * Lanjutkan pemupukan berimbang (NPK).
-        * Kalau sudah mulai berbunga/berbuah, tambahkan pupuk **Kalsium (Ca)** dan **Kalium (K)** agar bunga tidak rontok dan buah tidak busuk pantat.
+        **1. Pupuk:**
+        * Lanjutkan NPK berimbang.
+        * Tambahkan **Kalsium (Ca)** dan **Kalium (K)** saat berbuah.
         
-        **2. Jaga Kebersihan:**
-        * Cabut rumput liar di sekitar tanaman karena bisa jadi sarang hama.
-        * Tetap pantau tanaman setiap 3 hari sekali, terutama kalau musim hujan.
+        **2. Kebersihan:**
+        * Cabut rumput liar.
+        * Pantau rutin setiap 3 hari.
         """,
         "status": "Aman",
         "color": "#2ea043", # Hijau
@@ -214,47 +222,27 @@ CLASS_INFO = {
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
 # =============================
-# 5. LOAD MODEL (Cached)
+# 6. LOAD MODEL (Fixed Absolute Path)
 # =============================
-# @st.cache_resource
-# # def load_model():
-# #     path = "../models/mobilenetv2_tomato.h5" 
-# #     if not os.path.exists(path):
-# #         path_backup = "../models/mobilenetv2_tomato.h5"
-# #         if os.path.exists(path_backup):
-# #             return tf.keras.models.load_model(path_backup)
-# #         else:
-# #             return None
-# #     return tf.keras.models.load_model(path)
-
-
 @st.cache_resource
 def load_model():
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    model_path = os.path.join(current_dir, "..", "models", "mobilenetv2_tomato.h5")
-    
-    if not os.path.exists(model_path):
-        st.error(f"File model tidak ditemukan di: {model_path}")
+    if not os.path.exists(path_model):
+        st.error(f"❌ File model tidak ditemukan di: {path_model}")
         return None
-        
-    return tf.keras.models.load_model(model_path)
-
-
-# model = load_model()
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+    try:
+        return tf.keras.models.load_model(path_model)
+    except Exception as e:
+        st.error(f"Error saat memuat model: {e}")
+        return None
 
 model = load_model()
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SAMPLE_DIR = os.path.join(BASE_DIR, "..", "sample_images")
 
 # =============================
-# 6. SIDEBAR NAVIGASI
+# 7. SIDEBAR NAVIGASI
 # =============================
 with st.sidebar:
-    # --- Link Gambar Diaktifkan Kembali ---
-    st.image("", width=90)
+    # Menggunakan URL eksternal agar aman
+    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
@@ -309,11 +297,10 @@ if menu == "🚀 Cek Penyakit":
             <p class="metric-label">Foto Dicek Hari Ini</p>
         </div>''', unsafe_allow_html=True)
     with c3:
-        # Menangani potensi KeyError dengan .get()
         last_status = "-"
         if st.session_state.history:
             last_item = st.session_state.history[-1]
-            last_status = last_item.get('Hasil Diagnosa', last_item.get('Prediksi', '-'))
+            last_status = last_item.get('Hasil Diagnosa', "-")
 
         st.markdown(f'''
         <div class="metric-container">
@@ -323,20 +310,34 @@ if menu == "🚀 Cek Penyakit":
 
     st.write("")
     
-    # 2. GALERI REFERENSI (Expandable di Dashboard)
+    # 2. GALERI REFERENSI (Fixed Path)
     with st.expander("📚 Buka Kamus Penyakit (Contoh Gambar & Penjelasan)"):
         st.markdown("Lihat contoh gambar di bawah ini untuk membandingkan dengan tanaman Bapak/Ibu:")
+        
+        # Cek apakah folder sample ada
+        if not os.path.exists(SAMPLE_DIR):
+             st.warning(f"⚠️ Folder gambar sampel tidak ditemukan di: {SAMPLE_DIR}")
+        
         cols = st.columns(len(CLASS_NAMES))
         for idx, name in enumerate(CLASS_NAMES):
             with cols[idx]:
-                # Logika cari gambar
+                # Logika cari gambar (Case Insensitive)
                 img_path = None
-                possible_paths = [os.path.join(SAMPLE_DIR, name), os.path.join(SAMPLE_DIR, name.replace(" ", "_"))]
-                for p in possible_paths:
-                    if os.path.exists(p):
-                        files = [f for f in os.listdir(p) if f.lower().endswith(('.jpg','.png'))]
-                        if files: img_path = os.path.join(p, files[0])
-                        break
+                if os.path.exists(SAMPLE_DIR):
+                    # Mencoba berbagai variasi nama folder (Title Case, Lower Case, Underscore)
+                    possible_names = [name, name.lower(), name.replace(" ", "_")]
+                    
+                    target_folder = None
+                    # Cari folder yang cocok
+                    for folder_name in os.listdir(SAMPLE_DIR):
+                        if folder_name in possible_names:
+                             target_folder = os.path.join(SAMPLE_DIR, folder_name)
+                             break
+                    
+                    if target_folder:
+                        files = [f for f in os.listdir(target_folder) if f.lower().endswith(('.jpg','.png','.jpeg'))]
+                        if files: 
+                            img_path = os.path.join(target_folder, files[0])
                 
                 if img_path:
                     st.image(img_path, use_container_width=True)
@@ -380,72 +381,76 @@ if menu == "🚀 Cek Penyakit":
                 img_array = np.array(image.resize((224, 224))) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
                 
-                pred = model.predict(img_array)
-                idx = np.argmax(pred)
-                confidence = float(np.max(pred) * 100)
-                class_name = CLASS_NAMES[idx]
-                info = CLASS_INFO[class_name]
+                try:
+                    pred = model.predict(img_array)
+                    idx = np.argmax(pred)
+                    confidence = float(np.max(pred) * 100)
+                    class_name = CLASS_NAMES[idx]
+                    info = CLASS_INFO[class_name]
 
-                time.sleep(0.5)
-                my_bar.empty()
+                    time.sleep(0.5)
+                    my_bar.empty()
 
-                # --- HASIL UTAMA ---
-                if confidence < 60.0:
-                    st.error("⚠️ **Sistem Ragu-Ragu**")
-                    st.markdown("""
-                    Sistem kurang yakin dengan foto ini. 
-                    * Apakah fotonya buram?
-                    * Apakah terlalu gelap?
-                    * Atau mungkin ini bukan daun tomat?
-                    
-                    **Silakan coba foto ulang yang lebih jelas.**
-                    """)
-                else:
-                    # Simpan ke history
-                    add_to_history(uploaded_file.name, class_name, confidence)
+                    # --- HASIL UTAMA ---
+                    if confidence < 60.0:
+                        st.error("⚠️ **Sistem Ragu-Ragu**")
+                        st.markdown("""
+                        Sistem kurang yakin dengan foto ini. 
+                        * Apakah fotonya buram?
+                        * Apakah terlalu gelap?
+                        * Atau mungkin ini bukan daun tomat?
+                        
+                        **Silakan coba foto ulang yang lebih jelas.**
+                        """)
+                    else:
+                        # Simpan ke history
+                        add_to_history(uploaded_file.name, class_name, confidence)
 
-                    # Tampilan Header Hasil
-                    st.markdown(f"""
-                    <div class="result-box" style="border-left: 10px solid {info['color']};">
-                        <h4 style="margin:0; color: #8b949e;">Hasil Pemeriksaan:</h4>
-                        <h1 style="margin-top:5px; color: {info['color']}; font-size: 32px;">{info['display_name']}</h1>
-                        <hr style="border-color: #30363d;">
-                        <p style="margin:0; font-size: 16px;">
-                            Tingkat Keyakinan: <b>{confidence:.2f}%</b> <br>
-                            Status: <span style="color: {info['color']}; font-weight: bold;">{info['status']}</span>
-                        </p>
-                    </div>
-                    """, unsafe_allow_html=True)
+                        # Tampilan Header Hasil
+                        st.markdown(f"""
+                        <div class="result-box" style="border-left: 10px solid {info['color']};">
+                            <h4 style="margin:0; color: #8b949e;">Hasil Pemeriksaan:</h4>
+                            <h1 style="margin-top:5px; color: {info['color']}; font-size: 32px;">{info['display_name']}</h1>
+                            <hr style="border-color: #30363d;">
+                            <p style="margin:0; font-size: 16px;">
+                                Tingkat Keyakinan: <b>{confidence:.2f}%</b> <br>
+                                Status: <span style="color: {info['color']}; font-weight: bold;">{info['status']}</span>
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
 
-                    # Detail Informasi (2 Kolom)
-                    col_desc, col_sol = st.columns(2, gap="medium")
-                    
-                    with col_desc:
-                        with st.container(border=True):
-                            st.markdown(info['desc'])
-                            st.markdown(f"<a href='{info.get('wiki', '#')}' target='_blank' class='btn-wiki'>Baca Info di Wikipedia ↗</a>", unsafe_allow_html=True)
+                        # Detail Informasi (2 Kolom)
+                        col_desc, col_sol = st.columns(2, gap="medium")
+                        
+                        with col_desc:
+                            with st.container(border=True):
+                                st.markdown(info['desc'])
+                                st.markdown(f"<a href='{info.get('wiki', '#')}' target='_blank' class='btn-wiki'>Baca Info di Wikipedia ↗</a>", unsafe_allow_html=True)
 
-                    with col_sol:
-                        with st.container(border=True):
-                            st.markdown(info['solusi'])
-                            st.warning("⚠️ **Penting:** Selalu pakai masker saat menyemprot obat tanaman.")
+                        with col_sol:
+                            with st.container(border=True):
+                                st.markdown(info['solusi'])
+                                st.warning("⚠️ **Penting:** Selalu pakai masker saat menyemprot obat tanaman.")
 
-                    # Visualisasi Statistik (VERSI SEDERHANA)
-                    st.markdown("### 📊 Kemungkinan Lainnya")
-                    st.markdown("Berikut adalah perkiraan sistem:")
-                    probs = pred[0]
-                    sorted_idx = np.argsort(probs)[::-1]
-                    
-                    for i in sorted_idx:
-                        score = float(probs[i] * 100)
-                        if score > 1.0: # Hanya tampilkan yang di atas 1%
-                            col_stat_name, col_stat_bar = st.columns([1, 3])
-                            with col_stat_name:
-                                # Tampilkan nama penyakitnya
-                                st.text(f"{CLASS_INFO[CLASS_NAMES[i]]['display_name']}")
-                            with col_stat_bar:
-                                st.progress(float(probs[i]))
-                                st.caption(f"{score:.2f}%")
+                        # Visualisasi Statistik
+                        st.markdown("### 📊 Kemungkinan Lainnya")
+                        st.markdown("Berikut adalah perkiraan sistem:")
+                        probs = pred[0]
+                        sorted_idx = np.argsort(probs)[::-1]
+                        
+                        for i in sorted_idx:
+                            score = float(probs[i] * 100)
+                            if score > 1.0: # Hanya tampilkan yang di atas 1%
+                                col_stat_name, col_stat_bar = st.columns([1, 3])
+                                with col_stat_name:
+                                    st.text(f"{CLASS_INFO[CLASS_NAMES[i]]['display_name']}")
+                                with col_stat_bar:
+                                    st.progress(float(probs[i]))
+                                    st.caption(f"{score:.2f}%")
+                except Exception as e:
+                    st.error(f"Terjadi kesalahan saat prediksi: {e}")
+            else:
+                st.error("Model belum dimuat. Periksa file model Anda.")
 
         elif not uploaded_file:
             st.info("👈 Silakan upload foto daun di sebelah kiri.")
@@ -476,7 +481,7 @@ elif menu == "📊 Riwayat Saya":
         with col1:
             csv = df.to_csv(index=False).encode('utf-8')
             st.download_button(
-                "📥 Simpan (Excel/CSV)", 
+                "📥 Simpan (CSV)", 
                 data=csv, 
                 file_name="catatan_penyakit_tomat.csv", 
                 mime="text/csv",
