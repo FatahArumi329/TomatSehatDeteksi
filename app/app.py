@@ -216,16 +216,16 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 # =============================
 # 5. LOAD MODEL (Cached)
 # =============================
-@st.cache_resource
-# def load_model():
-#     path = "../models/mobilenetv2_tomato.h5" 
-#     if not os.path.exists(path):
-#         path_backup = "../models/mobilenetv2_tomato.h5"
-#         if os.path.exists(path_backup):
-#             return tf.keras.models.load_model(path_backup)
-#         else:
-#             return None
-#     return tf.keras.models.load_model(path)
+# @st.cache_resource
+# # def load_model():
+# #     path = "../models/mobilenetv2_tomato.h5" 
+# #     if not os.path.exists(path):
+# #         path_backup = "../models/mobilenetv2_tomato.h5"
+# #         if os.path.exists(path_backup):
+# #             return tf.keras.models.load_model(path_backup)
+# #         else:
+# #             return None
+# #     return tf.keras.models.load_model(path)
 
 
 @st.cache_resource
