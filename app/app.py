@@ -218,7 +218,7 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 # =============================
 @st.cache_resource
 def load_model():
-    path = "mobilenetv2_tomato.h5" 
+    path = "../models/mobilenetv2_tomato.h5" 
     if not os.path.exists(path):
         path_backup = "../models/mobilenetv2_tomato.h5"
         if os.path.exists(path_backup):
