@@ -523,7 +523,7 @@ elif menu == "ℹ️ Tentang Aplikasi":
     with col2:
         st.subheader("🛠️ Teknologi")
         st.markdown("""
-        Aplikasi ini menggunakan Kecerdasan Buatan (AI) yang sudah belajar dari ribuan foto daun tomat untuk mengenali penyakit.
+        Sistem ini dibangun menggunakan arsitektur **MobileNetV2**, sebuah model *Convolutional Neural Network (CNN)* yang efisien. Melalui metode *Transfer Learning*, model diadaptasi secara khusus menggunakan ratusan sampel citra daun tomat terkurasi untuk mengenali pola penyakit dengan presisi tinggi.
         """)
 
     st.divider()
