@@ -290,7 +290,6 @@ if menu == "🚀 Cek Penyakit":
     with c1:
         st.markdown(f'''
         <div class="metric-container">
-            # <p class="metric-value">{len(CLASS_NAMES)}</p>
             <p class="metric-value">2</p>
             <p class="metric-label">Jenis Penyakit Dikenali</p>
         </div>''', unsafe_allow_html=True)
