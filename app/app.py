@@ -216,7 +216,7 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 # =============================
 # 5. LOAD MODEL (Cached)
 # =============================
-# @st.cache_resource
+@st.cache_resource
 # def load_model():
 #     path = "../models/mobilenetv2_tomato.h5" 
 #     if not os.path.exists(path):
@@ -227,20 +227,16 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 #             return None
 #     return tf.keras.models.load_model(path)
 
-# model = load_model()
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+model = load_model()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
 
 @st.cache_resource
 def load_model():
-    # 1. Dapatkan lokasi absolut file app.py saat ini
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # 2. Bangun path menuju file model
-    # Logikanya: Dari folder 'app', MUNDUR satu langkah (..), lalu masuk 'models'
     model_path = os.path.join(current_dir, "..", "models", "mobilenetv2_tomato.h5")
     
-    # 3. Cek apakah file benar-benar ada (untuk debugging di logs cloud)
     if not os.path.exists(model_path):
         st.error(f"File model tidak ditemukan di: {model_path}")
         return None
