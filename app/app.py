@@ -241,16 +241,20 @@ def load_model():
     return tf.keras.models.load_model(model_path)
 
 
+# model = load_model()
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+
 model = load_model()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
+SAMPLE_DIR = os.path.join(BASE_DIR, "..", "sample_images")
 
 # =============================
 # 6. SIDEBAR NAVIGASI
 # =============================
 with st.sidebar:
     # --- Link Gambar Diaktifkan Kembali ---
-    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
+    st.image("", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
