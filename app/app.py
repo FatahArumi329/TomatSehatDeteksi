@@ -227,9 +227,6 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 #             return None
 #     return tf.keras.models.load_model(path)
 
-model = load_model()
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
 
 @st.cache_resource
 def load_model():
@@ -242,6 +239,11 @@ def load_model():
         return None
         
     return tf.keras.models.load_model(model_path)
+
+
+model = load_model()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SAMPLE_DIR = os.path.join(BASE_DIR, "sample_images")
 
 # =============================
 # 6. SIDEBAR NAVIGASI
