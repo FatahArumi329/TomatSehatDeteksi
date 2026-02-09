@@ -56,30 +56,33 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 # =============================
 # 4. CSS TAMPILAN (MODERN LIGHT MODE)
-# =============================
+# =============================st.markdown("""
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    html, body, [class*="css"] {
+    /* Global Reset */
+    html, body, [class*="css"], .stMarkdown, p, span {
         font-family: 'Inter', sans-serif;
+        color: #1f2328 !important; /* Memaksa semua teks ke warna hitam pekat */
     }
 
-    /* Latar Belakang Utama Putih Bersih */
+    /* Latar Belakang Utama Putih */
     .stApp {
-        background-color: #ffffff;
-        color: #1f2328;
+        background-color: #ffffff !important;
     }
 
-    /* Sidebar Abu-abu Muda Terang */
+    /* Sidebar Abu-abu Muda & Border */
     [data-testid="stSidebar"] {
-        background-color: #f6f8fa;
+        background-color: #f6f8fa !important;
         border-right: 1px solid #d0d7de;
     }
     
-    /* Teks Sidebar */
-    [data-testid="stSidebar"] .stMarkdown p, [data-testid="stSidebar"] h2 {
-        color: #1f2328 !important;
+    /* Khusus Teks di Sidebar agar tidak ikut putih */
+    [data-testid="stSidebar"] .stMarkdown p, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] span {
+        color: #24292f !important;
     }
 
     /* Perbaikan Lebar Halaman */
@@ -88,41 +91,38 @@ st.markdown("""
         max-width: 95% !important;
     }
 
-    /* Kartu Metrik - Gaya Neumorphism Lembut */
+    /* Kartu Metrik - Background Putih, Teks Gelap */
     .metric-container {
-        background-color: #ffffff;
-        border: 1px solid #d0d7de;
+        background-color: #ffffff !important;
+        border: 1px solid #d0d7de !important;
         border-radius: 12px;
         padding: 20px;
         text-align: center;
-        box-shadow: 0 1px 3px rgba(31,35,40,0.04);
+        box-shadow: 0 1px 3px rgba(31,35,40,0.08);
         transition: all 0.2s ease-in-out;
-    }
-    .metric-container:hover {
-        transform: translateY(-3px);
-        border-color: #0969da;
-        box-shadow: 0 8px 24px rgba(149,157,165,0.2);
     }
     .metric-value {
         font-size: 28px;
         font-weight: 700;
         margin: 0;
-        color: #0969da;
+        color: #0969da !important; /* Warna biru untuk angka agar menonjol */
     }
     .metric-label {
         font-size: 14px;
-        color: #57606a;
+        color: #57606a !important; /* Abu-abu gelap */
         margin-top: 5px;
     }
 
     /* Kotak Hasil Diagnosa */
     .result-box {
-        background: #f6f8fa;
+        background: #f6f8fa !important;
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid #d0d7de;
+        border: 1px solid #d0d7de !important;
         margin-bottom: 20px;
-        color: #1f2328;
+    }
+    .result-box h4, .result-box p {
+        color: #24292f !important;
     }
     
     /* Link Wiki */
@@ -131,47 +131,35 @@ st.markdown("""
         padding: 8px 16px;
         font-size: 13px;
         font-weight: 600;
-        color: #0969da !important;
-        background-color: #ddf4ff;
-        border: 1px solid rgba(9,105,218,0.2);
+        color: #ffffff !important; /* Teks tombol putih */
+        background-color: #0969da !important; /* Background tombol biru */
         border-radius: 6px;
         text-decoration: none;
         margin-top: 10px;
     }
-    .btn-wiki:hover {
-        background-color: #0969da;
-        color: #ffffff !important;
+
+    /* Progress Bar Hijau */
+    .stProgress > div > div > div > div {
+        background-color: #2da44e !important;
     }
 
-    /* Header & Teks Utama */
-    h1, h2, h3, h4 {
+    /* Perbaikan Card Tim (Halaman Tentang) */
+    /* Kita targetkan div yang ada di dalam kolom tim */
+    div[data-testid="stVerticalBlock"] > div > div > div > div > div {
         color: #1f2328 !important;
     }
-    
-    /* Info Box Streamlit agar pas dengan Light Mode */
-    .stAlert {
-        background-color: #f6f8fa;
-        border: 1px solid #d0d7de;
-        color: #1f2328;
-    }
 
-    /* Styling Progress Bar */
-    .stProgress > div > div > div > div {
-        background-color: #2da44e;
-    }
-    
-    /* Card Tim di Halaman Tentang */
-    .team-card {
-        background: #ffffff; 
-        border: 1px solid #d0d7de; 
-        padding: 15px; 
-        border-radius: 10px; 
+    /* Custom class untuk Card Tim agar lebih stabil */
+    .team-card-fix {
+        background: #f6f8fa !important;
+        border: 1px solid #d0d7de !important;
+        padding: 15px;
+        border-radius: 8px;
         text-align: center;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        color: #1f2328 !important;
     }
 </style>
 """, unsafe_allow_html=True)
-
 # =============================
 # 5. DATABASE PENGETAHUAN
 # =============================
