@@ -260,7 +260,7 @@ model = load_model()
 # =============================
 with st.sidebar:
     # Menggunakan URL eksternal agar aman & tidak error path
-    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
+    st.image("", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
@@ -278,6 +278,7 @@ with st.sidebar:
     st.markdown("---")
     
     # Status Indikator
+    confidence_text = f"{confidence:.2f}%"
     if model:
         st.markdown("""
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 12px; text-align: center;">
@@ -291,7 +292,7 @@ with st.sidebar:
             <h1 style="margin-top:5px; color: #0f172a; font-size: 34px;">{info['display_name']}</h1>
             <hr style="border-color: #f1f5f9; margin: 15px 0;">
             <p style="margin:0; font-size: 18px; color: #334155;">
-                Skor Keyakinan: <b style="color: {info['color']}">{confidence:.2f}%</b> <br>
+                Skor Keyakinan: <b style="color: {info['color']}">{confidence_text}</b> <br>
                 Status: <span style="background: {info['color']}22; color: {info['color']}; padding: 2px 8px; border-radius: 6px; font-weight: bold;">{info['status']}</span>
             </p>
         </div>
