@@ -329,30 +329,45 @@ if menu == "🚀 Cek Penyakit":
 
     st.write("")
     
-    with st.expander("📚 Buka Kamus Penyakit (Contoh Gambar & Penjelasan)"):
-        st.markdown("Lihat contoh gambar di bawah ini untuk membandingkan dengan tanaman Bapak/Ibu:")
-        if not os.path.exists(SAMPLE_DIR):
-             st.warning(f"⚠️ Folder gambar tidak ditemukan di: {SAMPLE_DIR}")
+    with st.expander("📚 Buka Kamus Penyakit (Referensi Visual)"):
+        st.markdown("Berikut adalah contoh perbandingan daun sehat dan sakit (3 sampel per kategori):")
         
-        cols = st.columns(len(CLASS_NAMES))
-        for idx, name in enumerate(CLASS_NAMES):
-            with cols[idx]:
-                img_path = None
+        # Kita buat container agar lebarnya bisa dikontrol (sekitar 50-70% dari layar wide)
+        _, center_col, _ = st.columns([1, 4, 1]) 
+        
+        with center_col:
+            for name in CLASS_NAMES:
+                st.markdown(f"#### 🍅 {CLASS_INFO[name]['display_name']}")
+                
+                # Buat 3 kolom kecil untuk 3 gambar per baris kelas
+                img_cols = st.columns(3)
+                
+                target_folder_path = None
+                # Logika pencarian folder (tetap sama)
                 if os.path.exists(SAMPLE_DIR):
-                    target_folder_path = None
                     for folder_on_disk in os.listdir(SAMPLE_DIR):
                         clean_disk = folder_on_disk.lower().replace("_", " ").strip()
                         clean_target = name.lower().replace("_", " ").strip()
                         if clean_disk == clean_target:
                             target_folder_path = os.path.join(SAMPLE_DIR, folder_on_disk)
                             break
-                    if target_folder_path and os.path.exists(target_folder_path):
-                        files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
-                        if files: img_path = os.path.join(target_folder_path, files[0])
                 
-                if img_path: st.image(img_path, use_container_width=True)
-                else: st.markdown(f"*(Gambar {name} Belum Tersedia)*")
-                st.markdown(f"**{CLASS_INFO[name]['display_name']}**")
+                # Ambil maksimal 3 gambar dari folder tersebut
+                if target_folder_path and os.path.exists(target_folder_path):
+                    files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
+                    
+                    for i in range(3):
+                        with img_cols[i]:
+                            if i < len(files):
+                                img_path = os.path.join(target_folder_path, files[i])
+                                st.image(img_path, use_container_width=True, caption=f"Sampel {i+1}")
+                            else:
+                                # Jika gambar di folder kurang dari 3, tampilkan placeholder
+                                st.image("https://via.placeholder.com/150?text=No+Image", use_container_width=True)
+                else:
+                    st.warning(f"Folder untuk {name} tidak ditemukan.")
+                
+                st.markdown("<br>", unsafe_allow_html=True) # Jarak antar kategori
                 
     st.divider()
 
