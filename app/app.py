@@ -56,84 +56,115 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
     }
 
-    /* Background Gelap */
+    /* Latar Belakang Utama Putih Bersih */
     .stApp {
-        background: linear-gradient(to bottom right, #0d1117, #161b22);
-        color: #e6edf3;
+        background-color: #ffffff;
+        color: #1f2328;
     }
 
-    /* --- PERBAIKAN LEBAR HALAMAN --- */
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        max-width: 98% !important;
-    }
-
-    /* Sidebar */
+    /* Sidebar Abu-abu Muda Terang */
     [data-testid="stSidebar"] {
-        background-color: #010409;
-        border-right: 1px solid #30363d;
+        background-color: #f6f8fa;
+        border-right: 1px solid #d0d7de;
+    }
+    
+    /* Teks Sidebar */
+    [data-testid="stSidebar"] .stMarkdown p, [data-testid="stSidebar"] h2 {
+        color: #1f2328 !important;
     }
 
-    /* Kartu Metrik */
+    /* Perbaikan Lebar Halaman */
+    .block-container {
+        padding: 2rem 3rem;
+        max-width: 95% !important;
+    }
+
+    /* Kartu Metrik - Gaya Neumorphism Lembut */
     .metric-container {
-        background-color: #21262d;
-        border: 1px solid #30363d;
+        background-color: #ffffff;
+        border: 1px solid #d0d7de;
         border-radius: 12px;
         padding: 20px;
         text-align: center;
-        transition: transform 0.3s ease;
+        box-shadow: 0 1px 3px rgba(31,35,40,0.04);
+        transition: all 0.2s ease-in-out;
     }
     .metric-container:hover {
-        transform: translateY(-5px);
-        border-color: #58a6ff;
+        transform: translateY(-3px);
+        border-color: #0969da;
+        box-shadow: 0 8px 24px rgba(149,157,165,0.2);
     }
     .metric-value {
         font-size: 28px;
         font-weight: 700;
         margin: 0;
-        color: #58a6ff;
+        color: #0969da;
     }
     .metric-label {
         font-size: 14px;
-        color: #8b949e;
+        color: #57606a;
         margin-top: 5px;
     }
 
-    /* Kotak Hasil */
+    /* Kotak Hasil Diagnosa */
     .result-box {
-        background: rgba(33, 38, 45, 0.95);
+        background: #f6f8fa;
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid #30363d;
+        border: 1px solid #d0d7de;
         margin-bottom: 20px;
+        color: #1f2328;
     }
     
-    /* Tombol Link */
+    /* Link Wiki */
     .btn-wiki {
         display: inline-block;
-        padding: 6px 12px;
-        font-size: 12px;
+        padding: 8px 16px;
+        font-size: 13px;
         font-weight: 600;
-        color: #58a6ff !important;
-        background-color: rgba(56, 139, 253, 0.1);
-        border: 1px solid rgba(56, 139, 253, 0.4);
-        border-radius: 20px;
+        color: #0969da !important;
+        background-color: #ddf4ff;
+        border: 1px solid rgba(9,105,218,0.2);
+        border-radius: 6px;
         text-decoration: none;
         margin-top: 10px;
     }
+    .btn-wiki:hover {
+        background-color: #0969da;
+        color: #ffffff !important;
+    }
 
-    /* Progress Bar Hijau */
+    /* Header & Teks Utama */
+    h1, h2, h3, h4 {
+        color: #1f2328 !important;
+    }
+    
+    /* Info Box Streamlit agar pas dengan Light Mode */
+    .stAlert {
+        background-color: #f6f8fa;
+        border: 1px solid #d0d7de;
+        color: #1f2328;
+    }
+
+    /* Styling Progress Bar */
     .stProgress > div > div > div > div {
-        background-image: linear-gradient(to right, #238636, #2ea043);
+        background-color: #2da44e;
+    }
+    
+    /* Card Tim di Halaman Tentang */
+    .team-card {
+        background: #ffffff; 
+        border: 1px solid #d0d7de; 
+        padding: 15px; 
+        border-radius: 10px; 
+        text-align: center;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 </style>
 """, unsafe_allow_html=True)
