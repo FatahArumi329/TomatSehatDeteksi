@@ -39,7 +39,7 @@ def add_to_history(filename, class_name, confidence):
         "Waktu": datetime.now().strftime("%d-%m-%Y %H:%M"),
         "Nama File": filename,
         "Hasil Diagnosa": class_name,
-        "Keyakinan": f"{confidence:.2f}%",
+        "Akurasi": f"{confidence:.2f}%",
         "Status": "✅ Aman" if class_name == "Healthy" else "⚠️ Perlu Tindakan"
     })
 
@@ -399,7 +399,7 @@ if menu == "🚀 Cek Penyakit":
                             <h1 style="margin-top:5px; color: {info['color']}; font-size: 32px;">{info['display_name']}</h1>
                             <hr style="border-color: #d0d7de;">
                             <p style="margin:0; font-size: 16px;">
-                                Tingkat Keyakinan: <b>{confidence:.2f}%</b> <br>
+                                Tingkat Akurasi: <b>{confidence:.2f}%</b> <br>
                                 Status: <span style="color: {info['color']}; font-weight: bold;">{info['status']}</span>
                             </p>
                         </div>
