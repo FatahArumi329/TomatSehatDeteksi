@@ -18,11 +18,18 @@ st.set_page_config(
 )
 
 # =============================
-# 2. DEFINISI PATH
+# 2. DEFINISI PATH (Sesuai Struktur Folder Anda)
 # =============================
+# Lokasi file app.py saat ini (di dalam folder 'app')
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Lokasi Root Repository (naik satu level dari 'app')
 ROOT_DIR = os.path.join(CURRENT_DIR, "..")
+
+# 1. Model ada di folder 'models' (di luar folder app)
 path_model = os.path.join(ROOT_DIR, "models", "mobilenetv2_tomato.h5")
+
+# 2. Gambar Sampel ada di folder 'sample_images' (di DALAM folder app)
+# Sesuai data: app\sample_images\Early_blight\sample1.JPG
 SAMPLE_DIR = os.path.join(CURRENT_DIR, "sample_images")
 
 # =============================
@@ -35,16 +42,17 @@ if 'uploader_key' not in st.session_state:
     st.session_state.uploader_key = 0
 
 def add_to_history(filename, class_name, confidence):
+    """Menyimpan log aktivitas ke session state."""
     st.session_state.history.append({
         "Waktu": datetime.now().strftime("%d-%m-%Y %H:%M"),
         "Nama File": filename,
         "Hasil Diagnosa": class_name,
-        "Keyakinan": f"{confidence:.2f}%",
+        "Akurasi": f"{confidence:.2f}%",
         "Status": "✅ Aman" if class_name == "Healthy" else "⚠️ Perlu Tindakan"
     })
 
 # =============================
-# 4. CSS TAMPILAN (LIGHT MODE)
+# 4. CSS TAMPILAN
 # =============================
 st.markdown("""
 <style>
@@ -54,13 +62,13 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    /* Background Putih */
+    /* Background Gelap */
     .stApp {
-        background-color: #ffffff;
-        color: #1f2328;
+        background: linear-gradient(to bottom right, #0d1117, #161b22);
+        color: #e6edf3;
     }
 
-    /* Perbaikan Lebar Halaman */
+    /* --- PERBAIKAN LEBAR HALAMAN --- */
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
@@ -69,78 +77,63 @@ st.markdown("""
         max-width: 98% !important;
     }
 
-    /* Sidebar Terang */
+    /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #f6f8fa;
-        border-right: 1px solid #d0d7de;
+        background-color: #010409;
+        border-right: 1px solid #30363d;
     }
 
-    /* Kartu Metrik Light */
+    /* Kartu Metrik */
     .metric-container {
-        background-color: #ffffff;
-        border: 1px solid #d0d7de;
+        background-color: #21262d;
+        border: 1px solid #30363d;
         border-radius: 12px;
         padding: 20px;
         text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
     }
     .metric-container:hover {
         transform: translateY(-5px);
-        border-color: #0969da;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-color: #58a6ff;
     }
     .metric-value {
         font-size: 28px;
         font-weight: 700;
         margin: 0;
-        color: #0969da;
+        color: #58a6ff;
     }
     .metric-label {
         font-size: 14px;
-        color: #57606a;
+        color: #8b949e;
         margin-top: 5px;
     }
 
-    /* Kotak Hasil Light */
+    /* Kotak Hasil */
     .result-box {
-        background: #f6f8fa;
+        background: rgba(33, 38, 45, 0.95);
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid #d0d7de;
+        border: 1px solid #30363d;
         margin-bottom: 20px;
-        color: #1f2328;
     }
     
-    /* Tombol Link Biru Modern */
+    /* Tombol Link */
     .btn-wiki {
         display: inline-block;
         padding: 6px 12px;
         font-size: 12px;
         font-weight: 600;
-        color: #0969da !important;
-        background-color: #ddf4ff;
-        border: 1px solid #0969da;
+        color: #58a6ff !important;
+        background-color: rgba(56, 139, 253, 0.1);
+        border: 1px solid rgba(56, 139, 253, 0.4);
         border-radius: 20px;
         text-decoration: none;
         margin-top: 10px;
     }
 
-    /* Header Teks */
-    h1, h2, h3, h4, p {
-        color: #1f2328 !important;
-    }
-
-    /* Progress Bar Hijau Segar */
+    /* Progress Bar Hijau */
     .stProgress > div > div > div > div {
-        background-image: linear-gradient(to right, #2da44e, #2ea043);
-    }
-
-    /* Penyesuaian Input File */
-    [data-testid="stFileUploader"] {
-        background-color: #f6f8fa;
-        border-radius: 10px;
-        padding: 10px;
+        background-image: linear-gradient(to right, #238636, #2ea043);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -173,7 +166,7 @@ CLASS_INFO = {
         * Semprot 1 minggu sekali.
         """,
         "status": "Waspada",
-        "color": "#9a6700", # Kuning tua (lebih kontras di putih)
+        "color": "#e3b341", # Kuning
         "wiki": "https://en.wikipedia.org/wiki/Alternaria_solani"
     },
     "Late Blight": {
@@ -199,7 +192,7 @@ CLASS_INFO = {
         * Pengobatan: Fungisida sistemik (**Dimethomorph** atau **Cymoxanil**).
         """,
         "status": "Bahaya / Kritis",
-        "color": "#cf222e", # Merah kontras
+        "color": "#d73a49", # Merah
         "wiki": "https://en.wikipedia.org/wiki/Phytophthora_infestans"
     },
     "Healthy": {
@@ -225,14 +218,14 @@ CLASS_INFO = {
         * Pantau rutin setiap 3 hari.
         """,
         "status": "Aman",
-        "color": "#1a7f37", # Hijau kontras
+        "color": "#2ea043", # Hijau
         "wiki": "https://en.wikipedia.org/wiki/Tomato"
     }
 }
 CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
 # =============================
-# 6. LOAD MODEL
+# 6. LOAD MODEL (Fixed Path)
 # =============================
 @st.cache_resource
 def load_model():
@@ -255,19 +248,22 @@ with st.sidebar:
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
-        <h2 style="margin:0; font-size: 24px; color: #1f2328;">TomatAI</h2>
-        <p style="color: #57606a; font-size: 12px;">Asisten Pintar Petani</p>
+        <h2 style="margin:0; font-size: 24px;">TomatAI</h2>
+        <p style="color: #8b949e; font-size: 12px;">Asisten Pintar Petani</p>
     </div>
     """, unsafe_allow_html=True)
 
+    # Inisialisasi menu default jika belum ada
     if 'menu_active' not in st.session_state:
         st.session_state.menu_active = "🚀 Cek Penyakit"
 
+    # Fungsi untuk mengubah halaman
     def set_menu(target):
         st.session_state.menu_active = target
 
     st.markdown("🔍 **NAVIGASI UTAMA**")
     
+    # Tombol Menu Navigasi (Pengganti Radio)
     if st.button("🚀 Cek Penyakit", use_container_width=True, type="primary" if st.session_state.menu_active == "🚀 Cek Penyakit" else "secondary"):
         set_menu("🚀 Cek Penyakit")
         st.rerun()
@@ -282,18 +278,19 @@ with st.sidebar:
 
     st.markdown("---")
     
+    # Status Indikator
     if model:
         st.markdown("""
-        <div style="background: #dafbe1; border: 1px solid #1a7f37; padding: 10px; border-radius: 8px; text-align: center;">
-            <span style="color: #1a7f37; font-weight: bold;">🟢 Sistem Siap</span>
-            <br><span style="font-size: 10px; color: #57606a;">Otak AI Terhubung</span>
+        <div style="background: rgba(46, 160, 67, 0.15); border: 1px solid #2ea043; padding: 10px; border-radius: 8px; text-align: center;">
+            <span style="color: #2ea043; font-weight: bold;">🟢 Sistem Siap</span>
+            <br><span style="font-size: 10px; color: #8b949e;">Otak AI Terhubung</span>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown("""
-        <div style="background: #ffebe9; border: 1px solid #cf222e; padding: 10px; border-radius: 8px; text-align: center;">
-            <span style="color: #cf222e; font-weight: bold;">🔴 Sistem Error</span>
-            <br><span style="font-size: 10px; color: #57606a;">File Model Hilang</span>
+        <div style="background: rgba(215, 58, 73, 0.15); border: 1px solid #d73a49; padding: 10px; border-radius: 8px; text-align: center;">
+            <span style="color: #d73a49; font-weight: bold;">🔴 Sistem Error</span>
+            <br><span style="font-size: 10px; color: #8b949e;">File Model Hilang</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -303,8 +300,10 @@ with st.sidebar:
 menu = st.session_state.menu_active
 
 if menu == "🚀 Cek Penyakit":
+    
     st.markdown("<h1 style='text-align: center; margin-bottom: 30px;'>🔬 Cek Kesehatan Tanaman Tomat</h1>", unsafe_allow_html=True)
 
+    # 1. KARTU METRIK DASHBOARD
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown(f'''
@@ -319,7 +318,11 @@ if menu == "🚀 Cek Penyakit":
             <p class="metric-label">Foto Dicek Hari Ini</p>
         </div>''', unsafe_allow_html=True)
     with c3:
-        last_status = st.session_state.history[-1].get('Hasil Diagnosa', "-") if st.session_state.history else "-"
+        last_status = "-"
+        if st.session_state.history:
+            last_item = st.session_state.history[-1]
+            last_status = last_item.get('Hasil Diagnosa', "-")
+
         st.markdown(f'''
         <div class="metric-container">
             <p class="metric-value" style="font-size: 20px;">{last_status}</p>
@@ -328,54 +331,79 @@ if menu == "🚀 Cek Penyakit":
 
     st.write("")
     
-    with st.expander("📚 Buka Kamus Penyakit (Contoh Gambar & Penjelasan)"):
-        st.markdown("Lihat contoh gambar di bawah ini untuk membandingkan dengan tanaman Bapak/Ibu:")
-        if not os.path.exists(SAMPLE_DIR):
-             st.warning(f"⚠️ Folder gambar tidak ditemukan di: {SAMPLE_DIR}")
+    # 2. GALERI REFERENSI (Smart Folder Search)
+    with st.expander("📚 Buka Kamus Penyakit (Referensi Visual)"):
+        st.markdown("Berikut adalah contoh perbandingan daun sehat dan sakit (3 sampel per kategori):")
         
-        cols = st.columns(len(CLASS_NAMES))
-        for idx, name in enumerate(CLASS_NAMES):
-            with cols[idx]:
-                img_path = None
+        # Kita buat container agar lebarnya bisa dikontrol (sekitar 50-70% dari layar wide)
+        _, center_col, _ = st.columns([1, 4, 1]) 
+        
+        with center_col:
+            for name in CLASS_NAMES:
+                st.markdown(f"#### 🍅 {CLASS_INFO[name]['display_name']}")
+                
+                # Buat 3 kolom kecil untuk 3 gambar per baris kelas
+                img_cols = st.columns(3)
+                
+                target_folder_path = None
+                # Logika pencarian folder (tetap sama)
                 if os.path.exists(SAMPLE_DIR):
-                    target_folder_path = None
                     for folder_on_disk in os.listdir(SAMPLE_DIR):
                         clean_disk = folder_on_disk.lower().replace("_", " ").strip()
                         clean_target = name.lower().replace("_", " ").strip()
                         if clean_disk == clean_target:
                             target_folder_path = os.path.join(SAMPLE_DIR, folder_on_disk)
                             break
-                    if target_folder_path and os.path.exists(target_folder_path):
-                        files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
-                        if files: img_path = os.path.join(target_folder_path, files[0])
                 
-                if img_path: st.image(img_path, use_container_width=True)
-                else: st.markdown(f"*(Gambar {name} Belum Tersedia)*")
-                st.markdown(f"**{CLASS_INFO[name]['display_name']}**")
+                # Ambil maksimal 3 gambar dari folder tersebut
+                if target_folder_path and os.path.exists(target_folder_path):
+                    files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
+                    
+                    for i in range(3):
+                        with img_cols[i]:
+                            if i < len(files):
+                                img_path = os.path.join(target_folder_path, files[i])
+                                st.image(img_path, use_container_width=True, caption=f"Sampel {i+1}")
+                            else:
+                                # Jika gambar di folder kurang dari 3, tampilkan placeholder
+                                st.image("https://via.placeholder.com/150?text=No+Image", use_container_width=True)
+                else:
+                    st.warning(f"Folder untuk {name} tidak ditemukan.")
+                
+                st.markdown("<br>", unsafe_allow_html=True) # Jarak antar kategori
                 
     st.divider()
 
+    # 3. AREA KERJA
     col_left, col_right = st.columns([1, 1.5], gap="large")
 
     with col_left:
         st.subheader("Ambil/Upload Foto Daun")
         st.info("💡 Tips: Pastikan foto fokus pada daun yang sakit dan cahayanya terang.")
         with st.container(border=True):
-            uploaded_file = st.file_uploader("", type=["jpg", "png", "jpeg"], key=f"up_{st.session_state.uploader_key}")
+            uploaded_file = st.file_uploader(
+                "", 
+                type=["jpg", "png", "jpeg"], 
+                key=f"up_{st.session_state.uploader_key}"
+            )
+            
             if uploaded_file:
                 image = Image.open(uploaded_file).convert("RGB")
-                st.image(image, caption="Foto yang akan dicek", use_container_width=True)
+                st.image(image, caption="Foto yang akan dicek", use_container_width=True, channels="RGB")
                 analyze_btn = st.button("🔍 Cek Penyakit Sekarang", type="primary", use_container_width=True)
 
     with col_right:
         if uploaded_file and 'analyze_btn' in locals() and analyze_btn:
             if model:
+                # Animasi Loading
                 progress_text = "Sedang memeriksa daun..."
                 my_bar = st.progress(0, text=progress_text)
+
                 for percent_complete in range(100):
-                    time.sleep(0.01)
+                    time.sleep(0.01) # Simulasi proses
                     my_bar.progress(percent_complete + 1, text=progress_text)
                 
+                # --- PROSES PREDIKSI ---
                 img_array = np.array(image.resize((224, 224))) / 255.0
                 img_array = np.expand_dims(img_array, axis=0)
                 
@@ -385,55 +413,75 @@ if menu == "🚀 Cek Penyakit":
                     confidence = float(np.max(pred) * 100)
                     class_name = CLASS_NAMES[idx]
                     info = CLASS_INFO[class_name]
+
                     time.sleep(0.5)
                     my_bar.empty()
 
+                    # --- HASIL UTAMA ---
                     if confidence < 60.0:
                         st.error("⚠️ **Sistem Ragu-Ragu**")
-                        st.markdown("Silakan coba foto ulang yang lebih jelas.")
+                        st.markdown("""
+                        Sistem kurang yakin dengan foto ini. 
+                        * Apakah fotonya buram?
+                        * Apakah terlalu gelap?
+                        * Atau mungkin ini bukan daun tomat?
+                        
+                        **Silakan coba foto ulang yang lebih jelas.**
+                        """)
                     else:
+                        # Simpan ke history
                         add_to_history(uploaded_file.name, class_name, confidence)
+
+                        # Tampilan Header Hasil
                         st.markdown(f"""
                         <div class="result-box" style="border-left: 10px solid {info['color']};">
-                            <h4 style="margin:0; color: #57606a;">Hasil Pemeriksaan:</h4>
+                            <h4 style="margin:0; color: #8b949e;">Hasil Pemeriksaan:</h4>
                             <h1 style="margin-top:5px; color: {info['color']}; font-size: 32px;">{info['display_name']}</h1>
-                            <hr style="border-color: #d0d7de;">
+                            <hr style="border-color: #30363d;">
                             <p style="margin:0; font-size: 16px;">
-                                Tingkat Keyakinan: <b>{confidence:.2f}%</b> <br>
+                                Tingkat Akurasi: <b>{confidence:.2f}%</b> <br>
                                 Status: <span style="color: {info['color']}; font-weight: bold;">{info['status']}</span>
                             </p>
                         </div>
                         """, unsafe_allow_html=True)
 
+                        # Detail Informasi (2 Kolom)
                         col_desc, col_sol = st.columns(2, gap="medium")
+                        
                         with col_desc:
                             with st.container(border=True):
                                 st.markdown(info['desc'])
                                 st.markdown(f"<a href='{info.get('wiki', '#')}' target='_blank' class='btn-wiki'>Baca Info di Wikipedia ↗</a>", unsafe_allow_html=True)
+
                         with col_sol:
                             with st.container(border=True):
                                 st.markdown(info['solusi'])
-                                st.warning("⚠️ **Penting:** Pakai masker saat menyemprot obat.")
+                                st.warning("⚠️ **Penting:** Selalu pakai masker saat menyemprot obat tanaman.")
 
+                        # Visualisasi Statistik
                         st.markdown("### 📊 Kemungkinan Lainnya")
+                        st.markdown("Berikut adalah perkiraan sistem:")
                         probs = pred[0]
                         sorted_idx = np.argsort(probs)[::-1]
+                        
                         for i in sorted_idx:
                             score = float(probs[i] * 100)
-                            if score > 1.0:
+                            if score > 1.0: # Hanya tampilkan yang di atas 1%
                                 col_stat_name, col_stat_bar = st.columns([1, 3])
-                                with col_stat_name: st.text(f"{CLASS_INFO[CLASS_NAMES[i]]['display_name']}")
+                                with col_stat_name:
+                                    st.text(f"{CLASS_INFO[CLASS_NAMES[i]]['display_name']}")
                                 with col_stat_bar:
                                     st.progress(float(probs[i]))
                                     st.caption(f"{score:.2f}%")
                 except Exception as e:
                     st.error(f"Terjadi kesalahan saat prediksi: {e}")
             else:
-                st.error("Model belum dimuat.")
+                st.error("Model belum dimuat. Periksa file model Anda.")
+
         elif not uploaded_file:
             st.info("👈 Silakan upload foto daun di sebelah kiri.")
             st.markdown("""
-            <div style="text-align: center; opacity: 0.2; padding-top: 50px;">
+            <div style="text-align: center; opacity: 0.3; padding-top: 50px;">
                 <img src="https://cdn-icons-png.flaticon.com/512/3024/3024310.png" width="150">
                 <h3>Belum Ada Foto</h3>
             </div>
@@ -445,18 +493,32 @@ if menu == "🚀 Cek Penyakit":
 elif menu == "📊 Riwayat Saya":
     st.title("📊 Catatan Pemeriksaan")
     st.markdown("Ini adalah daftar foto yang sudah Bapak/Ibu cek hari ini:")
+    
     if len(st.session_state.history) > 0:
         df = pd.DataFrame(st.session_state.history)
-        st.dataframe(df, use_container_width=True)
+        
+        # Styling Tabel
+        st.dataframe(
+            df, 
+            use_container_width=True
+        )
+        
         col1, col2 = st.columns([1, 4])
         with col1:
-            st.download_button("📥 Simpan (CSV)", data=df.to_csv(index=False).encode('utf-8'), file_name="catatan_tomat.csv", mime="text/csv", type="primary")
+            csv = df.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                "📥 Simpan (CSV)", 
+                data=csv, 
+                file_name="catatan_penyakit_tomat.csv", 
+                mime="text/csv",
+                type="primary"
+            )
         with col2:
             if st.button("🗑️ Hapus Semua Catatan"):
                 st.session_state.history = []
                 st.rerun()
     else:
-        st.info("Belum ada data.")
+        st.info("Belum ada data. Silakan cek penyakit dulu di halaman depan.")
 
 # =============================
 # HALAMAN 3: TENTANG
@@ -467,27 +529,35 @@ elif menu == "ℹ️ Tentang Aplikasi":
     st.title("TomatAI v1.0")
     st.caption("Teknologi Canggih untuk Pertanian Indonesia")
     st.markdown("</div>", unsafe_allow_html=True)
+    
     st.divider()
     
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("🎯 Tujuan Kami")
-        st.markdown("Membantu petani tomat mengetahui penyakit tanaman lebih cepat.")
+        st.markdown("""
+        Membantu petani tomat mengetahui penyakit tanaman lebih cepat, supaya tidak gagal panen dan hasil kebun melimpah.
+        """)
+        
     with col2:
         st.subheader("🛠️ Teknologi")
-        st.markdown("Sistem ini dibangun menggunakan arsitektur **MobileNetV2**.")
+        st.markdown("""
+        Sistem ini dibangun menggunakan arsitektur **MobileNetV2**, sebuah model *Convolutional Neural Network (CNN)* yang efisien. Melalui metode *Transfer Learning*, model diadaptasi secara khusus menggunakan ratusan sampel citra daun tomat terkurasi untuk mengenali pola penyakit dengan presisi tinggi.
+        """)
 
     st.divider()
     st.subheader("👥 Dibuat Oleh (Kelompok 3)")
+    
     team_cols = st.columns(4)
     members = ["Achmad Karis Wibowo", "Albert Cendra Hermawan", "Yosia Marpaung", "Dhimas Muhammad Fattah Arrumy"]
+    
     for i, member in enumerate(members):
         with team_cols[i]:
             st.markdown(f"""
-            <div style="background: #f6f8fa; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #d0d7de;">
-                <p style="font-weight: bold; margin:0; color: #1f2328;">{member}</p>
-                <p style="font-size: 12px; color: #57606a;">Tim Pengembang</p>
+            <div style="background: #21262d; padding: 10px; border-radius: 8px; text-align: center;">
+                <p style="font-weight: bold; margin:0;">{member}</p>
+                <p style="font-size: 12px; color: #8b949e;">Tim Pengembang</p>
             </div>
             """, unsafe_allow_html=True)
 
-    st.markdown("<br><p style='text-align: center; color: #57606a; font-size: 12px;'>© 2026 TomatAI Project.</p>", unsafe_allow_html=True)
+    st.markdown("<br><p style='text-align: center; color: #8b949e; font-size: 12px;'>© 2026 TomatAI Project.</p>", unsafe_allow_html=True)
