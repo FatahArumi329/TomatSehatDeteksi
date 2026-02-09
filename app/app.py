@@ -259,13 +259,12 @@ model = load_model()
 # 7. SIDEBAR NAVIGASI
 # =============================
 with st.sidebar:
-    # Menggunakan URL eksternal agar aman & tidak error path
     st.image("", width=90)
     
     st.markdown("""
     <div style="margin-top: -10px; margin-bottom: 20px;">
         <h2 style="margin:0; font-size: 24px;">TomatAI</h2>
-        <p style="color: #8b949e; font-size: 12px;">Asisten Pintar Petani</p>
+        <p style="color: #64748b; font-size: 12px;">Asisten Pintar Petani</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -278,7 +277,6 @@ with st.sidebar:
     st.markdown("---")
     
     # Status Indikator
-    confidence_text = f"{confidence:.2f}%"
     if model:
         st.markdown("""
         <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 12px; text-align: center;">
@@ -287,14 +285,10 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
     else:
-        <div class="result-box" style="border-left: 10px solid {info['color']};">
-            <h4 style="margin:0; color: #64748b; font-weight: 400;">Hasil Diagnosa:</h4>
-            <h1 style="margin-top:5px; color: #0f172a; font-size: 34px;">{info['display_name']}</h1>
-            <hr style="border-color: #f1f5f9; margin: 15px 0;">
-            <p style="margin:0; font-size: 18px; color: #334155;">
-                Skor Keyakinan: <b style="color: {info['color']}">{confidence_text}</b> <br>
-                Status: <span style="background: {info['color']}22; color: {info['color']}; padding: 2px 8px; border-radius: 6px; font-weight: bold;">{info['status']}</span>
-            </p>
+        st.markdown("""
+        <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 12px; border-radius: 12px; text-align: center;">
+            <span style="color: #dc2626; font-weight: bold;">🔴 Sistem Error</span>
+            <br><span style="font-size: 11px; color: #64748b;">Gagal Memuat Model</span>
         </div>
         """, unsafe_allow_html=True)
 
