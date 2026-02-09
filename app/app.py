@@ -55,7 +55,6 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 # 4. CSS TAMPILAN
 # =============================
-# Styling custom untuk UI yang lebih modern dan user-friendly
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -64,109 +63,68 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    /* Latar Belakang Utama Putih Bersih */
     .stApp {
         background-color: #ffffff;
         color: #1f2328;
     }
 
-    /* Sidebar Abu-abu Muda Terang */
     [data-testid="stSidebar"] {
         background-color: #f6f8fa;
         border-right: 1px solid #d0d7de;
     }
+
+    /* Perbaikan Teks Nama File Upload agar nampak */
+    [data-testid="stFileUploaderFileName"] {
+        color: #1f2328 !important;
+    }
     
-    /* Teks Sidebar */
-    [data-testid="stSidebar"] .stMarkdown p, [data-testid="stSidebar"] h2 {
+    /* Perbaikan Teks di dalam Small Info/Upload */
+    .stMarkdown p, .stText {
         color: #1f2328 !important;
     }
 
-    /* Perbaikan Lebar Halaman */
-    .block-container {
-        padding: 2rem 3rem;
-        max-width: 95% !important;
-    }
-
-    /* Kartu Metrik - Gaya Neumorphism Lembut */
-    .metric-container {
-        background-color: #ffffff;
-        border: 1px solid #d0d7de;
-        border-radius: 12px;
-        padding: 20px;
+    /* Kartu Tim di Halaman Tentang - DIUBAH AGAR KONTRAS */
+    .team-card-container {
+        background: #21262d; 
+        padding: 15px; 
+        border-radius: 10px; 
         text-align: center;
-        box-shadow: 0 1px 3px rgba(31,35,40,0.04);
-        transition: all 0.2s ease-in-out;
+        border: 1px solid #30363d;
     }
-    .metric-container:hover {
-        transform: translateY(-3px);
-        border-color: #0969da;
-        box-shadow: 0 8px 24px rgba(149,157,165,0.2);
+    .team-member-name {
+        color: #f0f6fc !important; /* Putih terang */
+        font-weight: bold;
+        margin-bottom: 0px;
     }
-    .metric-value {
-        font-size: 28px;
-        font-weight: 700;
-        margin: 0;
-        color: #0969da;
-    }
-    .metric-label {
-        font-size: 14px;
-        color: #57606a;
-        margin-top: 5px;
+    .team-member-role {
+        color: #8b949e !important; /* Abu-abu terang */
+        font-size: 12px;
     }
 
-    /* Kotak Hasil Diagnosa */
+    /* Button Hover Effect agar nampak interaktif */
+    button:hover {
+        border-color: #0969da !important;
+        color: #0969da !important;
+    }
+
+    /* Styling khusus untuk Hapus Semua Catatan (Danger Button) */
+    .stButton > button[kind="secondary"] {
+        color: #d73a49 !important; /* Warna merah agar nampak */
+        border-color: #d73a49 !important;
+    }
+
+    /* Styling Teks Disclaimer di dalam Warning Box */
+    .stAlert p {
+        color: #1f2328 !important; /* Hitam agar nampak di bg kuning/biru */
+        font-weight: 500;
+    }
+
     .result-box {
         background: #f6f8fa;
         border-radius: 15px;
         padding: 25px;
         border: 1px solid #d0d7de;
-        margin-bottom: 20px;
         color: #1f2328;
-    }
-    
-    /* Link Wiki */
-    .btn-wiki {
-        display: inline-block;
-        padding: 8px 16px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #0969da !important;
-        background-color: #ddf4ff;
-        border: 1px solid rgba(9,105,218,0.2);
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 10px;
-    }
-    .btn-wiki:hover {
-        background-color: #0969da;
-        color: #ffffff !important;
-    }
-
-    /* Header & Teks Utama */
-    h1, h2, h3, h4 {
-        color: #1f2328 !important;
-    }
-    
-    /* Info Box Streamlit agar pas dengan Light Mode */
-    .stAlert {
-        background-color: #f6f8fa;
-        border: 1px solid #d0d7de;
-        color: #1f2328;
-    }
-
-    /* Styling Progress Bar */
-    .stProgress > div > div > div > div {
-        background-color: #2da44e;
-    }
-    
-    /* Card Tim di Halaman Tentang */
-    .team-card {
-        background: #ffffff; 
-        border: 1px solid #d0d7de; 
-        padding: 15px; 
-        border-radius: 10px; 
-        text-align: center;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -587,9 +545,9 @@ elif menu == "ℹ️ Tentang Aplikasi":
     for i, member in enumerate(members):
         with team_cols[i]:
             st.markdown(f"""
-            <div style="background: #21262d; padding: 10px; border-radius: 8px; text-align: center;">
-                <p style="font-weight: bold; margin:0;">{member}</p>
-                <p style="font-size: 12px; color: #8b949e;">Tim Pengembang</p>
+            <div class="team-card-container">
+                <p class="team-member-name">{member}</p>
+                <p class="team-member-role">Tim Pengembang</p>
             </div>
             """, unsafe_allow_html=True)
 
