@@ -10,7 +10,6 @@ from datetime import datetime
 # =============================
 # 1. KONFIGURASI HALAMAN & TEMA
 # =============================
-# Menggunakan set_page_config untuk branding aplikasi
 st.set_page_config(
     page_title="TomatAI - Sahabat Petani Tomat",
     page_icon="🍅",
@@ -545,9 +544,9 @@ elif menu == "ℹ️ Tentang Aplikasi":
     for i, member in enumerate(members):
         with team_cols[i]:
             st.markdown(f"""
-            <div class="team-card-container">
-                <p class="team-member-name">{member}</p>
-                <p class="team-member-role">Tim Pengembang</p>
+            <div style="background: #21262d; padding: 10px; border-radius: 8px; text-align: center;">
+                <p style="font-weight: bold; margin:0;">{member}</p>
+                <p style="font-size: 12px; color: #8b949e;">Tim Pengembang</p>
             </div>
             """, unsafe_allow_html=True)
 
