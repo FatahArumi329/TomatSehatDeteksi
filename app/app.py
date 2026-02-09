@@ -506,7 +506,7 @@ elif menu == "📊 Riwayat Saya":
 # =============================
 elif menu == "ℹ️ Tentang Aplikasi":
     st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-    st.image("", width=120)
+    st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=120)
     st.title("TomatAI v1.0")
     st.caption("Teknologi Canggih untuk Pertanian Indonesia")
     st.markdown("</div>", unsafe_allow_html=True)
