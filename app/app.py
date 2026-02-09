@@ -416,17 +416,49 @@ if menu == "🚀 Cek Penyakit":
                                 st.warning("⚠️ **Penting:** Pakai masker saat menyemprot obat.")
 
                         st.markdown("### 📊 Kemungkinan Lainnya")
+                    
+                        # --- GRAFIK ANALISA PROBABILITAS ---
+                        st.markdown("### 📊 Analisa Akurasi AI")
+                        
                         probs = pred[0]
-                        sorted_idx = np.argsort(probs)[::-1]
-                        for i in sorted_idx:
-                            score = float(probs[i] * 100)
-                            if score > 1.0:
-                                col_stat_name, col_stat_bar = st.columns([1, 3])
-                                with col_stat_name: st.text(f"{CLASS_INFO[CLASS_NAMES[i]]['display_name']}")
-                                with col_stat_bar:
-                                    st.progress(float(probs[i]))
-                                    st.caption(f"{score:.2f}%")
-                except Exception as e:
+                        # Menyiapkan data untuk grafik
+                        chart_data = pd.DataFrame({
+                            'Penyakit': [CLASS_INFO[name]['display_name'] for name in CLASS_NAMES],
+                            'Akurasi (%)': [float(p * 100) for p in probs],
+                            'Warna': [CLASS_INFO[name]['color'] for name in CLASS_NAMES]
+                        })
+                        
+                        # Mengurutkan dari yang tertinggi
+                        chart_data = chart_data.sort_values('Akurasi (%)', ascending=True)
+
+                        # Membuat Horizontal Bar Chart
+                        fig = px.bar(
+                            chart_data, 
+                            x='Akurasi (%)', 
+                            y='Penyakit', 
+                            orientation='h',
+                            text='Akurasi (%)',
+                            color='Penyakit',
+                            color_discrete_map={row['Penyakit']: row['Warna'] for _, row in chart_data.iterrows()}
+                        )
+
+                        # Mengatur tampilan grafik agar pas dengan layout
+                        fig.update_traces(
+                            texttemplate='%{text:.2f}%', 
+                            textposition='outside',
+                            cliponaxis=False
+                        )
+                        fig.update_layout(
+                            showlegend=False,
+                            height=250,
+                            margin=dict(l=0, r=50, t=10, b=10),
+                            xaxis=dict(range=[0, 110], visible=False), # Sembunyikan angka bawah agar bersih
+                            yaxis=dict(title=None),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)'
+                        )
+
+                        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})                except Exception as e:
                     st.error(f"Terjadi kesalahan saat prediksi: {e}")
             else:
                 st.error("Model belum dimuat.")
