@@ -244,6 +244,7 @@ model = load_model()
 # 7. SIDEBAR NAVIGASI
 # =============================
 with st.sidebar:
+    # Menggunakan URL eksternal agar aman & tidak error path
     st.image("https://cdn-icons-png.flaticon.com/512/188/188333.png", width=90)
     
     st.markdown("""
@@ -252,30 +253,13 @@ with st.sidebar:
         <p style="color: #8b949e; font-size: 12px;">Asisten Pintar Petani</p>
     </div>
     """, unsafe_allow_html=True)
-
-    # Inisialisasi menu default jika belum ada
-    if 'menu_active' not in st.session_state:
-        st.session_state.menu_active = "🚀 Cek Penyakit"
-
-    # Fungsi untuk mengubah halaman
-    def set_menu(target):
-        st.session_state.menu_active = target
-
-    st.markdown("🔍 **NAVIGASI UTAMA**")
     
-    # Tombol Menu Navigasi (Pengganti Radio)
-    if st.button("🚀 Cek Penyakit", use_container_width=True, type="primary" if st.session_state.menu_active == "🚀 Cek Penyakit" else "secondary"):
-        set_menu("🚀 Cek Penyakit")
-        st.rerun()
-
-    if st.button("📊 Riwayat Saya", use_container_width=True, type="primary" if st.session_state.menu_active == "📊 Riwayat Saya" else "secondary"):
-        set_menu("📊 Riwayat Saya")
-        st.rerun()
-
-    if st.button("ℹ️ Tentang Aplikasi", use_container_width=True, type="primary" if st.session_state.menu_active == "ℹ️ Tentang Aplikasi" else "secondary"):
-        set_menu("ℹ️ Tentang Aplikasi")
-        st.rerun()
-
+    menu = st.radio(
+        "Pilih Menu:", 
+        ["🚀 Cek Penyakit", "📊 Riwayat Saya", "ℹ️ Tentang Aplikasi"],
+        index=0
+    )
+    
     st.markdown("---")
     
     # Status Indikator
