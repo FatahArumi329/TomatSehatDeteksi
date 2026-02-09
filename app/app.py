@@ -297,6 +297,8 @@ with st.sidebar:
 # =============================
 # HALAMAN 1: DASHBOARD UTAMA
 # =============================
+menu = st.session_state.menu_active
+
 if menu == "🚀 Cek Penyakit":
     
     st.markdown("<h1 style='text-align: center; margin-bottom: 30px;'>🔬 Cek Kesehatan Tanaman Tomat</h1>", unsafe_allow_html=True)
