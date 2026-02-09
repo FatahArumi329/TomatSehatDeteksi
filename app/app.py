@@ -54,112 +54,90 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 # 4. CSS TAMPILAN
 # =============================
-# =============================
-# 4. CSS TAMPILAN (MODERN LIGHT MODE)
-# =============================st.markdown("""
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     
-    /* Global Reset */
-    html, body, [class*="css"], .stMarkdown, p, span {
+    html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
-        color: #1f2328 !important; /* Memaksa semua teks ke warna hitam pekat */
     }
 
-    /* Latar Belakang Utama Putih */
+    /* Background Gelap */
     .stApp {
-        background-color: #ffffff !important;
+        background: linear-gradient(to bottom right, #0d1117, #161b22);
+        color: #e6edf3;
     }
 
-    /* Sidebar Abu-abu Muda & Border */
-    [data-testid="stSidebar"] {
-        background-color: #f6f8fa !important;
-        border-right: 1px solid #d0d7de;
-    }
-    
-    /* Khusus Teks di Sidebar agar tidak ikut putih */
-    [data-testid="stSidebar"] .stMarkdown p, 
-    [data-testid="stSidebar"] h2, 
-    [data-testid="stSidebar"] span {
-        color: #24292f !important;
-    }
-
-    /* Perbaikan Lebar Halaman */
+    /* --- PERBAIKAN LEBAR HALAMAN --- */
     .block-container {
-        padding: 2rem 3rem;
-        max-width: 95% !important;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        max-width: 98% !important;
     }
 
-    /* Kartu Metrik - Background Putih, Teks Gelap */
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #010409;
+        border-right: 1px solid #30363d;
+    }
+
+    /* Kartu Metrik */
     .metric-container {
-        background-color: #ffffff !important;
-        border: 1px solid #d0d7de !important;
+        background-color: #21262d;
+        border: 1px solid #30363d;
         border-radius: 12px;
         padding: 20px;
         text-align: center;
-        box-shadow: 0 1px 3px rgba(31,35,40,0.08);
-        transition: all 0.2s ease-in-out;
+        transition: transform 0.3s ease;
+    }
+    .metric-container:hover {
+        transform: translateY(-5px);
+        border-color: #58a6ff;
     }
     .metric-value {
         font-size: 28px;
         font-weight: 700;
         margin: 0;
-        color: #0969da !important; /* Warna biru untuk angka agar menonjol */
+        color: #58a6ff;
     }
     .metric-label {
         font-size: 14px;
-        color: #57606a !important; /* Abu-abu gelap */
+        color: #8b949e;
         margin-top: 5px;
     }
 
-    /* Kotak Hasil Diagnosa */
+    /* Kotak Hasil */
     .result-box {
-        background: #f6f8fa !important;
+        background: rgba(33, 38, 45, 0.95);
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid #d0d7de !important;
+        border: 1px solid #30363d;
         margin-bottom: 20px;
     }
-    .result-box h4, .result-box p {
-        color: #24292f !important;
-    }
     
-    /* Link Wiki */
+    /* Tombol Link */
     .btn-wiki {
         display: inline-block;
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 6px 12px;
+        font-size: 12px;
         font-weight: 600;
-        color: #ffffff !important; /* Teks tombol putih */
-        background-color: #0969da !important; /* Background tombol biru */
-        border-radius: 6px;
+        color: #58a6ff !important;
+        background-color: rgba(56, 139, 253, 0.1);
+        border: 1px solid rgba(56, 139, 253, 0.4);
+        border-radius: 20px;
         text-decoration: none;
         margin-top: 10px;
     }
 
     /* Progress Bar Hijau */
     .stProgress > div > div > div > div {
-        background-color: #2da44e !important;
-    }
-
-    /* Perbaikan Card Tim (Halaman Tentang) */
-    /* Kita targetkan div yang ada di dalam kolom tim */
-    div[data-testid="stVerticalBlock"] > div > div > div > div > div {
-        color: #1f2328 !important;
-    }
-
-    /* Custom class untuk Card Tim agar lebih stabil */
-    .team-card-fix {
-        background: #f6f8fa !important;
-        border: 1px solid #d0d7de !important;
-        padding: 15px;
-        border-radius: 8px;
-        text-align: center;
-        color: #1f2328 !important;
+        background-image: linear-gradient(to right, #238636, #2ea043);
     }
 </style>
 """, unsafe_allow_html=True)
+
 # =============================
 # 5. DATABASE PENGETAHUAN
 # =============================
