@@ -47,7 +47,7 @@ def add_to_history(filename, class_name, confidence):
         "Waktu": datetime.now().strftime("%d-%m-%Y %H:%M"),
         "Nama File": filename,
         "Hasil Diagnosa": class_name,
-        "Akurasi": f"{confidence:.2f}%",
+        "Keyakinan": f"{confidence:.2f}%",
         "Status": "✅ Aman" if class_name == "Healthy" else "⚠️ Perlu Tindakan"
     })
 
@@ -56,74 +56,84 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
     }
 
+    /* Background Gelap */
     .stApp {
-        background-color: #ffffff;
-        color: #1f2328;
+        background: linear-gradient(to bottom right, #0d1117, #161b22);
+        color: #e6edf3;
     }
 
+    /* --- PERBAIKAN LEBAR HALAMAN --- */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        max-width: 98% !important;
+    }
+
+    /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #f6f8fa;
-        border-right: 1px solid #d0d7de;
+        background-color: #010409;
+        border-right: 1px solid #30363d;
     }
 
-    /* Perbaikan Teks Nama File Upload agar nampak */
-    [data-testid="stFileUploaderFileName"] {
-        color: #1f2328 !important;
-    }
-    
-    /* Perbaikan Teks di dalam Small Info/Upload */
-    .stMarkdown p, .stText {
-        color: #1f2328 !important;
-    }
-
-    /* Kartu Tim di Halaman Tentang - DIUBAH AGAR KONTRAS */
-    .team-card-container {
-        background: #21262d; 
-        padding: 15px; 
-        border-radius: 10px; 
-        text-align: center;
+    /* Kartu Metrik */
+    .metric-container {
+        background-color: #21262d;
         border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
     }
-    .team-member-name {
-        color: #f0f6fc !important; /* Putih terang */
-        font-weight: bold;
-        margin-bottom: 0px;
+    .metric-container:hover {
+        transform: translateY(-5px);
+        border-color: #58a6ff;
     }
-    .team-member-role {
-        color: #8b949e !important; /* Abu-abu terang */
-        font-size: 12px;
+    .metric-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+        color: #58a6ff;
     }
-
-    /* Button Hover Effect agar nampak interaktif */
-    button:hover {
-        border-color: #0969da !important;
-        color: #0969da !important;
-    }
-
-    /* Styling khusus untuk Hapus Semua Catatan (Danger Button) */
-    .stButton > button[kind="secondary"] {
-        color: #d73a49 !important; /* Warna merah agar nampak */
-        border-color: #d73a49 !important;
+    .metric-label {
+        font-size: 14px;
+        color: #8b949e;
+        margin-top: 5px;
     }
 
-    /* Styling Teks Disclaimer di dalam Warning Box */
-    .stAlert p {
-        color: #1f2328 !important; /* Hitam agar nampak di bg kuning/biru */
-        font-weight: 500;
-    }
-
+    /* Kotak Hasil */
     .result-box {
-        background: #f6f8fa;
+        background: rgba(33, 38, 45, 0.95);
         border-radius: 15px;
         padding: 25px;
-        border: 1px solid #d0d7de;
-        color: #1f2328;
+        border: 1px solid #30363d;
+        margin-bottom: 20px;
+    }
+    
+    /* Tombol Link */
+    .btn-wiki {
+        display: inline-block;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #58a6ff !important;
+        background-color: rgba(56, 139, 253, 0.1);
+        border: 1px solid rgba(56, 139, 253, 0.4);
+        border-radius: 20px;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
+    /* Progress Bar Hijau */
+    .stProgress > div > div > div > div {
+        background-image: linear-gradient(to right, #238636, #2ea043);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -322,45 +332,44 @@ if menu == "🚀 Cek Penyakit":
     st.write("")
     
     # 2. GALERI REFERENSI (Smart Folder Search)
-    with st.expander("📚 Buka Kamus Penyakit (Referensi Visual)"):
-        st.markdown("Berikut adalah contoh perbandingan daun sehat dan sakit (3 sampel per kategori):")
+    with st.expander("📚 Buka Kamus Penyakit (Contoh Gambar & Penjelasan)"):
+        st.markdown("Lihat contoh gambar di bawah ini untuk membandingkan dengan tanaman Bapak/Ibu:")
         
-        # Kita buat container agar lebarnya bisa dikontrol (sekitar 50-70% dari layar wide)
-        _, center_col, _ = st.columns([1, 4, 1]) 
+        # Cek apakah folder sample ada
+        if not os.path.exists(SAMPLE_DIR):
+             st.warning(f"⚠️ Folder gambar tidak ditemukan di: {SAMPLE_DIR}")
         
-        with center_col:
-            for name in CLASS_NAMES:
-                st.markdown(f"#### 🍅 {CLASS_INFO[name]['display_name']}")
+        cols = st.columns(len(CLASS_NAMES))
+        for idx, name in enumerate(CLASS_NAMES):
+            with cols[idx]:
+                img_path = None
                 
-                # Buat 3 kolom kecil untuk 3 gambar per baris kelas
-                img_cols = st.columns(3)
-                
-                target_folder_path = None
-                # Logika pencarian folder (tetap sama)
                 if os.path.exists(SAMPLE_DIR):
+                    # --- LOGIKA PENCARIAN FOLDER PINTAR (CASE INSENSITIVE) ---
+                    # Ini memperbaiki masalah "Early_blight" vs "Early Blight"
+                    target_folder_path = None
+                    
                     for folder_on_disk in os.listdir(SAMPLE_DIR):
+                        # Bersihkan nama folder (huruf kecil semua, underscore jadi spasi)
                         clean_disk = folder_on_disk.lower().replace("_", " ").strip()
                         clean_target = name.lower().replace("_", " ").strip()
+                        
                         if clean_disk == clean_target:
                             target_folder_path = os.path.join(SAMPLE_DIR, folder_on_disk)
                             break
-                
-                # Ambil maksimal 3 gambar dari folder tersebut
-                if target_folder_path and os.path.exists(target_folder_path):
-                    files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
                     
-                    for i in range(3):
-                        with img_cols[i]:
-                            if i < len(files):
-                                img_path = os.path.join(target_folder_path, files[i])
-                                st.image(img_path, use_container_width=True, caption=f"Sampel {i+1}")
-                            else:
-                                # Jika gambar di folder kurang dari 3, tampilkan placeholder
-                                st.image("https://via.placeholder.com/150?text=No+Image", use_container_width=True)
-                else:
-                    st.warning(f"Folder untuk {name} tidak ditemukan.")
+                    if target_folder_path and os.path.exists(target_folder_path):
+                        files = [f for f in os.listdir(target_folder_path) if f.lower().endswith(('.jpg','.png','.jpeg'))]
+                        if files: 
+                            img_path = os.path.join(target_folder_path, files[0])
                 
-                st.markdown("<br>", unsafe_allow_html=True) # Jarak antar kategori
+                # Tampilkan Gambar jika ada
+                if img_path:
+                    st.image(img_path, use_container_width=True)
+                else:
+                    st.markdown(f"*(Gambar {name} Belum Tersedia)*")
+                
+                st.markdown(f"**{CLASS_INFO[name]['display_name']}**")
                 
     st.divider()
 
@@ -429,7 +438,7 @@ if menu == "🚀 Cek Penyakit":
                             <h1 style="margin-top:5px; color: {info['color']}; font-size: 32px;">{info['display_name']}</h1>
                             <hr style="border-color: #30363d;">
                             <p style="margin:0; font-size: 16px;">
-                                Tingkat Akurasi: <b>{confidence:.2f}%</b> <br>
+                                Tingkat Keyakinan: <b>{confidence:.2f}%</b> <br>
                                 Status: <span style="color: {info['color']}; font-weight: bold;">{info['status']}</span>
                             </p>
                         </div>
