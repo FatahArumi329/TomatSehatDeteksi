@@ -10,6 +10,7 @@ from datetime import datetime
 # =============================
 # 1. KONFIGURASI HALAMAN & TEMA
 # =============================
+# Menggunakan set_page_config untuk branding aplikasi
 st.set_page_config(
     page_title="TomatAI - Sahabat Petani Tomat",
     page_icon="🍅",
@@ -54,6 +55,7 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 # 4. CSS TAMPILAN
 # =============================
+# Styling custom untuk UI yang lebih modern dan user-friendly
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
