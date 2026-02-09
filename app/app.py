@@ -280,16 +280,20 @@ with st.sidebar:
     # Status Indikator
     if model:
         st.markdown("""
-        <div style="background: rgba(46, 160, 67, 0.15); border: 1px solid #2ea043; padding: 10px; border-radius: 8px; text-align: center;">
-            <span style="color: #2ea043; font-weight: bold;">🟢 Sistem Siap</span>
-            <br><span style="font-size: 10px; color: #8b949e;">Otak AI Terhubung</span>
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 12px; text-align: center;">
+            <span style="color: #16a34a; font-weight: bold;">🟢 Sistem Siap</span>
+            <br><span style="font-size: 11px; color: #64748b;">AI Berhasil Dimuat</span>
         </div>
         """, unsafe_allow_html=True)
     else:
-        st.markdown("""
-        <div style="background: rgba(215, 58, 73, 0.15); border: 1px solid #d73a49; padding: 10px; border-radius: 8px; text-align: center;">
-            <span style="color: #d73a49; font-weight: bold;">🔴 Sistem Error</span>
-            <br><span style="font-size: 10px; color: #8b949e;">File Model Hilang</span>
+        <div class="result-box" style="border-left: 10px solid {info['color']};">
+            <h4 style="margin:0; color: #64748b; font-weight: 400;">Hasil Diagnosa:</h4>
+            <h1 style="margin-top:5px; color: #0f172a; font-size: 34px;">{info['display_name']}</h1>
+            <hr style="border-color: #f1f5f9; margin: 15px 0;">
+            <p style="margin:0; font-size: 18px; color: #334155;">
+                Skor Keyakinan: <b style="color: {info['color']}">{confidence:.2f}%</b> <br>
+                Status: <span style="background: {info['color']}22; color: {info['color']}; padding: 2px 8px; border-radius: 6px; font-weight: bold;">{info['status']}</span>
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -550,9 +554,9 @@ elif menu == "ℹ️ Tentang Aplikasi":
     for i, member in enumerate(members):
         with team_cols[i]:
             st.markdown(f"""
-            <div style="background: #21262d; padding: 10px; border-radius: 8px; text-align: center;">
-                <p style="font-weight: bold; margin:0;">{member}</p>
-                <p style="font-size: 12px; color: #8b949e;">Tim Pengembang</p>
+            <div style="background: #ffffff; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <p style="font-weight: bold; margin:0; color: #1e293b;">{member}</p>
+                <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Tim Pengembang</p>
             </div>
             """, unsafe_allow_html=True)
 
