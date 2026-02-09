@@ -56,84 +56,100 @@ def add_to_history(filename, class_name, confidence):
 # =============================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
     
     html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* Background Gelap */
+    /* Background Putih Bersih */
     .stApp {
-        background: linear-gradient(to bottom right, #0d1117, #161b22);
-        color: #e6edf3;
+        background-color: #ffffff;
+        color: #1a1a1a;
     }
 
     /* --- PERBAIKAN LEBAR HALAMAN --- */
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        max-width: 98% !important;
+        max-width: 95% !important;
     }
 
-    /* Sidebar */
+    /* Sidebar Terang */
     [data-testid="stSidebar"] {
-        background-color: #010409;
-        border-right: 1px solid #30363d;
+        background-color: #f8f9fa;
+        border-right: 1px solid #eceef1;
     }
 
-    /* Kartu Metrik */
+    /* Kartu Metrik Putih */
     .metric-container {
-        background-color: #21262d;
-        border: 1px solid #30363d;
-        border-radius: 12px;
-        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 16px;
+        padding: 24px;
         text-align: center;
-        transition: transform 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        transition: all 0.3s ease;
     }
     .metric-container:hover {
         transform: translateY(-5px);
-        border-color: #58a6ff;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+        border-color: #2ea043;
     }
     .metric-value {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 700;
         margin: 0;
-        color: #58a6ff;
+        color: #2ea043;
     }
     .metric-label {
         font-size: 14px;
-        color: #8b949e;
+        color: #666666;
         margin-top: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     /* Kotak Hasil */
     .result-box {
-        background: rgba(33, 38, 45, 0.95);
-        border-radius: 15px;
-        padding: 25px;
-        border: 1px solid #30363d;
-        margin-bottom: 20px;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
     }
     
     /* Tombol Link */
     .btn-wiki {
         display: inline-block;
-        padding: 6px 12px;
-        font-size: 12px;
+        padding: 8px 16px;
+        font-size: 13px;
         font-weight: 600;
-        color: #58a6ff !important;
-        background-color: rgba(56, 139, 253, 0.1);
-        border: 1px solid rgba(56, 139, 253, 0.4);
-        border-radius: 20px;
+        color: #2ea043 !important;
+        background-color: rgba(46, 160, 67, 0.08);
+        border: 1px solid rgba(46, 160, 67, 0.2);
+        border-radius: 25px;
         text-decoration: none;
-        margin-top: 10px;
+        margin-top: 15px;
+        transition: background 0.2s;
+    }
+    .btn-wiki:hover {
+        background-color: rgba(46, 160, 67, 0.15);
     }
 
-    /* Progress Bar Hijau */
-    .stProgress > div > div > div > div {
-        background-image: linear-gradient(to right, #238636, #2ea043);
+    /* Penyesuaian Input File */
+    .stFileUploader {
+        background-color: #fcfcfc;
+        border: 2px dashed #e0e0e0;
+        border-radius: 15px;
+        padding: 10px;
+    }
+
+    /* Judul & Teks */
+    h1, h2, h3 {
+        color: #1a1a1a !important;
+        font-weight: 700 !important;
     }
 </style>
 """, unsafe_allow_html=True)
