@@ -6,6 +6,7 @@ from PIL import Image
 import os
 import time
 from datetime import datetime
+import plotly.express as px
 
 # =============================
 # 1. KONFIGURASI HALAMAN & TEMA
