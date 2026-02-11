@@ -28,11 +28,15 @@ Model dibangun menggunakan skrip `pipeline.py` dengan tahapan sebagai berikut:
 
 Berdasarkan pengujian pada data validasi (120 citra), model mencapai akurasi keseluruhan sebesar **88%**. Berikut adalah rincian performa per kategori:
 
-| Kelas | Precision | Recall | F1-Score |
-| --- | --- | --- | --- |
-| **Early Blight** | 0.84 | 0.78 | 0.81 |
-| **Late Blight** | 0.97 | 0.85 | 0.91 |
-| **Healthy** | 0.83 | 1.00 | 0.91 |
+```markdown
+| Kelas | Precision | Recall | F1-Score | Support |
+| :--- | :---: | :---: | :---: | :---: |
+| **Tomato Early Blight** | 0.84 | 0.78 | 0.81 | 40 |
+| **Tomato Late Blight** | 0.97 | 0.85 | 0.91 | 40 |
+| **Tomato Healthy** | 0.83 | 1.00 | 0.91 | 40 |
+| **Akurasi Keseluruhan** | | | **0.88** | **120** |
+
+```
 
 **Confusion Matrix:**
 
@@ -43,12 +47,27 @@ Berdasarkan pengujian pada data validasi (120 citra), model mencapai akurasi kes
 
 ```
 
+Tabel Dependensi
+
+Jika ingin menambahkan spesifikasi teknologi yang digunakan secara formal:
+
+```markdown
+| Library | Versi | Deskripsi |
+| :--- | :--- | :--- |
+| **TensorFlow** | 2.15.0+ | Framework utama Deep Learning |
+| **Streamlit** | Terbaru | Framework deployment web |
+| **NumPy** | Terbaru | Komputasi matriks citra |
+| **Plotly** | Terbaru | Visualisasi interaktif |
+
+```
+
 ## 👥 Tim Pengembang (Kelompok 3)
 
 * Achmad Karis Wibowo
 * Albert Cendra Hermawan
 * Yosia Marpaung
 * Dhimas Muhammad Fattah Arrumy
+
 
 ## 📚 Daftar Pustaka
 
